@@ -36,3 +36,25 @@ avrdude: safemode: Fuses OK
 
 avrdude done.  Thank you.
 
+* Tool-Chain
+** sudo apt-get install make avr-libc avrdude binutils-avr gcc-avr gdb-avr
+* Tutorials
+** German robot course 
+svn checkout http://ornella.iwr.uni-heidelberg.de/svn/basis
+** Amercan_Tutorials
+
+
+
+http://canthack.org/2010/12/programming-the-arduino-in-pure-c/
+http://balau82.wordpress.com/2011/03/29/programming-arduino-uno-in-pure-c/
+AVR C https://www.mainframe.cx/~ckuethe/avr-c-tutorial/  
+http://www.mjoldfield.com/atelier/2009/02/arduino-cli.html
+http://johanneshoff.com/arduino-command-line.htm
+http://kartikmohta.com/tech/avr/tutorial/
+
+* Arduino-Uno
+http://arduino.cc/en/uploads/Main/arduino-uno-schematic.pd
+* AVR-info
+http://download-mirror.savannah.gnu.org/releases//avrdude/avrdude-doc-5.10.pdf
+* Atmel-C-Stuff
+http://www.atmel.com/images/doc8453.pdf
