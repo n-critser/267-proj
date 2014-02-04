@@ -9,7 +9,7 @@
    build: $ avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o blink_led.o blink_led.c
           $ avr-gcc -mmcu=atmega328p blink_led.o -o blink_led
           $ avr-objcopy -O ihex -R .eeprom blink_led blink_led.hex
-          $ avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
+          $ sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
    upload:
           1: find the port--->
           chaos@chaos ~/Dev/Arduino/267-proj $ lsusb    
@@ -43,12 +43,12 @@ int main (void){
         while(1) {
                 for (leds = 1; leds <= (1 << 5); leds <<= 1){
                         PORTB = leds;
-                        _delay_ms(50);
+                        _delay_ms(200);
                 }
 
                 for (leds = (1 <<4); leds >= 2; leds >>=1) {
                         PORTB = leds;
-                        _delay_ms(50);
+                        _delay_ms(200);
                 }
                
         }
