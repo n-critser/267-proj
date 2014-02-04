@@ -14,9 +14,12 @@ based talking entity.
 ** 1 
 COMMAND: avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
 
---ERROR:
+ERROR:
 avrdude: ser_open(): can't open device "/dev/ttyACM0": Permission denied
 ioctl("TIOCMGET"): Invalid argument
+
+ANSWER:
+Run avrdude as sudo!
 
 * c-arduino basics
 
