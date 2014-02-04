@@ -10,6 +10,16 @@ low level assembly instructions used by the processor itself, but is not
 limited to this level of programming.  My goal is to create an atmega328
 based talking entity.  
 
+* TASKS
+** TODO Makefile 
+   DEADLINE: <2014-02-04 Tue>
+** TODO Using libraries in C
+   DEADLINE: <2014-02-07 Fri>
+** TODO Accessing storage in C
+   DEADLINE: <2014-02-09 Sun>
+** TODO Parts list for "project"
+   DEADLINE: <2014-02-09 Sun>
+
 * chromebook-problems
 ** 1 
 COMMAND: avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
