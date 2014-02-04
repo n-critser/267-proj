@@ -1,4 +1,11 @@
 /* file: blink_led.c
+   -----------------------------
+   description: Currently this has loops that do nothing.  It just increases the flash rate of the
+                on board LED connected to I/O 13 .  This can be extended to a breadboard which will
+                by running a wire from pin13 to on lead of an LED and running another wire to GND
+                (ground).  
+   -------------------------------------------------------------------------------------------
+
    build: $ avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o blink_led.o blink_led.c
           $ avr-gcc -mmcu=atmega328p blink_led.o -o blink_led
           $ avr-objcopy -O ihex -R .eeprom blink_led blink_led.hex
