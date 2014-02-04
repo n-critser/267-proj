@@ -10,6 +10,14 @@ low level assembly instructions used by the processor itself, but is not
 limited to this level of programming.  My goal is to create an atmega328
 based talking entity.  
 
+* chromebook-problems
+** 1 
+COMMAND: avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
+
+--ERROR:
+avrdude: ser_open(): can't open device "/dev/ttyACM0": Permission denied
+ioctl("TIOCMGET"): Invalid argument
+
 * c-arduino basics
 
 chaos@chaos ~/Dev/Arduino/267-proj $  avr-gcc -mmcu=atmega328p blink_led.o -o blink_led
