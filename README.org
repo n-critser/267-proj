@@ -70,7 +70,7 @@ http://www.avrfreaks.net/index.php?name=PNphpBB2&file=printview&t=126600&start=0
 
 *** FIX:  put the define in FILE.c itself.  
 This allows the compilation with the makefile without a warning 
-#define F_CPU 16000000UL 
+"#define F_CPU 16000000UL" 
 
 
 * c-arduino basics
