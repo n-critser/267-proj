@@ -30,6 +30,7 @@
 
  */
 /* 3.5 Tip #5 – Constants in program space    */
+#define F_CPU 16000000UL 
 #include <avr/io.h>
 #include <util/delay.h>
 
