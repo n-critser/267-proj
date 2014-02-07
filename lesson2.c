@@ -30,9 +30,9 @@
 #define B3 0x08
 #define B4 0x10
 #define B5 0x20
-#define B6 0x40
-#define B7 0x80
-#define D 100 /* ms */
+//#define B6 0x40
+//#define B7 0x80
+#define D 200 /* ms */
 
 int main (void)
 {
