@@ -46,7 +46,7 @@ Upload to Board:
 ** Makefile build-&-upload
 
 
-* chromebook-problems
+* Bugs-&-Fixes
 ** 1 
 COMMAND: avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
 
@@ -56,6 +56,22 @@ ioctl("TIOCMGET"): Invalid argument
 
 ANSWER:
 Run avrdude as sudo!
+
+** 2 
+*** ERROR: warning: #warning "F_CPU not defined for <util/delay.h>" [-Wcpp]
+Error comes from an undefined preprocessor statement in the FILE.c
+Chris's tutorial puts this define in the compilation pipeline itself
+But when using a makefile that didn't fix the problem. I don't know why.
+
+As a note, <util/delay.h> will use some defualt to define this but on the
+chromebook this resulted in a super fast blinking LED that burned out after
+30 seconds or so.  !!!!BE WARNED
+http://www.avrfreaks.net/index.php?name=PNphpBB2&file=printview&t=126600&start=0
+
+*** FIX:  put the define in FILE.c itself.  
+This allows the compilation with the makefile without a warning 
+#define F_CPU 16000000UL 
+
 
 * c-arduino basics
 
