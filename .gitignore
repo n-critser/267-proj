@@ -1,3 +1,4 @@
 *.o
 *.hex
 blink_led
+*.out
