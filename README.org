@@ -11,8 +11,9 @@ limited to this level of programming.  My goal is to create an atmega328
 based talking entity.  
 
 * TASKS
-** TODO Makefile 
+** DONE 1st iteration Makefile 
    DEADLINE: <2014-02-04 Tue>
+** TODO Chris Kuethe tutorial seperate dir
 ** TODO Using libraries in C
    DEADLINE: <2014-02-07 Fri>
 ** TODO Accessing storage in C
@@ -88,7 +89,8 @@ avrdude done.  Thank you.
 ** German robot course 
 svn checkout http://ornella.iwr.uni-heidelberg.de/svn/basis
 ** Amercan_Tutorials
-
+*** Chris Kuethe--https://www.mainframe.cx/~ckuethe/avr-c-tutorial/
+https://www.mainframe.cx/~ckuethe/avr-c-tutorial/pin_map.html
 
 
 http://canthack.org/2010/12/programming-the-arduino-in-pure-c/
