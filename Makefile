@@ -20,3 +20,4 @@ CFLAGS=-g  -Os -DF_CPU=16000000UL -mmcu=$(MCU) -Wall
 
 $(FILE).o : $(FILE).c 
 	$(CC) $(CFLAGS) -Os -c $(FILE).c
+
