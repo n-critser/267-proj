@@ -14,12 +14,26 @@ based talking entity.
 ** DONE 1st iteration Makefile 
    DEADLINE: <2014-02-04 Tue>
 ** TODO Chris Kuethe tutorial seperate dir
+** TODO Serial input from keyboard
+   DEADLINE: <2014-02-12 Wed>
+** TODO Text to speach testing for arduino
+   DEADLINE: <2014-02-12 Wed>
+** TODO Using a SD card for storage
+   DEADLINE: <2014-02-14 Fri>
 ** TODO Using libraries in C
    DEADLINE: <2014-02-07 Fri>
 ** TODO Accessing storage in C
    DEADLINE: <2014-02-09 Sun>
 ** TODO Parts list for "project"
    DEADLINE: <2014-02-09 Sun>
+
+* SERIAL 
+** Output
+-this does get the output from the serial port 
+cat /dev/ttyACM0 
+** Input
+haven't tested yet
+echo run > /dev/ttyACM0 # supposed to get serial output from Computer
 
 * Compile-Pipeline
 
@@ -44,7 +58,6 @@ Upload to Board:
  $ sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:blink_led.hex
 
 ** Makefile build-&-upload
-
 
 * Bugs-&-Fixes
 ** 1 
@@ -71,7 +84,6 @@ http://www.avrfreaks.net/index.php?name=PNphpBB2&file=printview&t=126600&start=0
 *** FIX:  put the define in FILE.c itself.  
 This allows the compilation with the makefile without a warning 
 "#define F_CPU 16000000UL" 
-
 
 * c-arduino basics
 

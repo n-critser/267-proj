@@ -1,7 +1,7 @@
 MCU=atmega328p
 CC=avr-gcc
 OBJCOPY=avr-objcopy
-FILE=lesson3
+FILE=lesson4
 #CPU_FLAG=-DF_CPU=16000000UL
 # build: $ avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o blink_led.o blink_led.c
 # $ avr-gcc -mmcu=atmega328p blink_led.o -o blink_led
