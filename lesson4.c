@@ -15,22 +15,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#define F_CPU 16000000UL
+#define F_CPU 16000000UL  /*clock rate set = 16MhZ i think  */
 #include <avr/io.h>
 #include <util/delay.h>
 
+
+/*Setting up the serial port  */
 void serial_init(unsigned int bittimer)
 {
-	/* Set the baud rate */
+	/* Set the baud rate register  12bits so need 2core reg {hi,lo}   */
 	UBRR0H = (unsigned char) (bittimer >> 8);
 	UBRR0L = (unsigned char) bittimer;
 	/* set the framing to 8N1 */
-	UCSR0C = (3 << UCSZ00);
-	/* Engage! */
+        /* can also use --->UCSR0C = 0x06;  */
+	UCSR0C = (3 << UCSZ00); /*bit shift 3 by the zero register  */
+	/* Engage! RXEN0 and TXEN0 are the read and write serial registers */
 	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 	return;
 }
-
+/* Let the writing begin  */
 void serial_write(unsigned char c)
 {
 	while ( !(UCSR0A & (1 << UDRE0)) )
@@ -41,7 +44,7 @@ void serial_write(unsigned char c)
 #define SPEED 9600
 int main (void)
 {
-	char i = 0;
+	char i = 0; /*Party starts at zero   */
 	char *str = "the quick brown fox jumps over the lazy dog. 1234567890\r\n";
 
 	/* let the preprocessor calculate this */

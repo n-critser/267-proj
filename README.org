@@ -4,21 +4,36 @@
 #+DATE: 2014-02-04
 
 * Abstract
-  Create a cool project for 267 class that forces me to learn the inner 
+  My goal is to create an talking entity using the Arduino Uno rev3 and 
+some speakers all contained within an anthropomorphic representation. 
+I aim to create a cool project for 267 class that forces me to learn the inner 
 workings of the atmega328 microcontroller.  This may include learning the 
 low level assembly instructions used by the processor itself, but is not 
-limited to this level of programming.  My goal is to create an atmega328
-based talking entity.  
+limited to this level of programming.
 
+   I will be using a c-library which pushes phoneme simulations and the
+code necessary to interact with the serial read and write registers of 
+the dedicated speech board.  
+
+   For simulated lip movement I will use 4-3x3 matrix blocks which will
+react to the serial output pushed to the speech module.    
+
+* Components
+** Speakers
+** Arduino Uno - 2 boards (1 for speech , 1 for everything else)
+** Battery pack/ ON-Off
+** 4-3*3 led matrices for simulated lip movement
+** shift registers
 * TASKS
 ** DONE 1st iteration Makefile 
    DEADLINE: <2014-02-04 Tue>
 ** TODO Chris Kuethe tutorial seperate dir
 ** TODO Serial input from keyboard
    DEADLINE: <2014-02-12 Wed>
+** TODO Serial 2 way commune
 ** TODO Text to speach testing for arduino
    DEADLINE: <2014-02-12 Wed>
-** TODO Using a SD card for storage
+** TODO ?   Using a SD card for storage
    DEADLINE: <2014-02-14 Fri>
 ** TODO Using libraries in C
    DEADLINE: <2014-02-07 Fri>
@@ -132,8 +147,6 @@ http://kartikmohta.com/tech/avr/tutorial/
 http://arduino.cc/en/uploads/Main/arduino-uno-schematic.pd
 * AVR-info
 http://download-mirror.savannah.gnu.org/releases//avrdude/avrdude-doc-5.10.pdf
-* Atmel-C-Stuff
-http://www.atmel.com/images/doc8453.pdf
 * Links 
 http://code.google.com/p/tinkerit/wiki/Cantarino
 http://forum.arduino.cc/index.php?topic=49654.0
@@ -151,3 +164,36 @@ http://www.speechchips.com/shop/category.aspx?catid=3
 
 XX?
 http://brittonkerin.com/cduino/
+* AtmEGA328-datasheet++
+** Pins & Ports
+Pin TOTAL= 28 PDIP style
+*** Ports 
+VCC - digital supply voltage
+GND - ground
+PortB - (PB7:0) XTAL1/XTAL2/TOSC1/TOSC2
+PortC - (PC5:0)
+PC6/RESET
+PortD - (PD7:0)
+AVcc - AVCC is the supply voltage pin for the A/D Converter, PC3:0, and ADC7:6 
+AREF is the analog reference pin for the A/D Converter.
+ADC7:6(TQFP and QFN/MLF package only) ?? what the fuck does that mean?
+
+** Qtouch capacitive touch sensing
+Atmel® offers the QTouch® library for embedding capacitive touch buttons, sliders and wheels functionality into
+AVR® microcontrollers. The patented charge-transfer signal acquisition offers robust sensing and includes fully
+debounced reporting of touch keys and includes Adjacent Key Suppression® (AKSTM) technology for unambiguous
+detection of key events. The easy-to-use QTouch Suite toolchain allows you to explore, develop and debug your
+own touch applications.
+
+** Program on the fly SPI
+The device is manufactured using Atmel’s high density non-volatile memory technology. The On-chip ISP Flash
+allows the program memory to be reprogrammed In-System through an SPI serial interface, by a conventional non-
+volatile memory programmer, or by an On-chip Boot program running on the AVR core. The Boot program can use
+any interface to download the application program in the Application Flash memory. Software in the Boot Flash
+section will continue to run while the Application Flash section is updated, providing true Read-While-Write opera-
+tion. By combining an 8-bit RISC CPU with In-System Self-Programmable Flash on a monolithic chip, the Atmel
+ATmega48A/PA/88A/PA/168A/PA/328/P is a powerful microcontroller that provides a highly flexible and cost effec-
+tive solution to many embedded control applications.
+
+
+http://www.atmel.com/images/doc8453.pdf
