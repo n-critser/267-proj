@@ -134,3 +134,20 @@ http://arduino.cc/en/uploads/Main/arduino-uno-schematic.pd
 http://download-mirror.savannah.gnu.org/releases//avrdude/avrdude-doc-5.10.pdf
 * Atmel-C-Stuff
 http://www.atmel.com/images/doc8453.pdf
+* Links 
+http://code.google.com/p/tinkerit/wiki/Cantarino
+http://forum.arduino.cc/index.php?topic=49654.0
+http://forum.arduino.cc/index.php/topic,136758.0.html
+http://letsmakerobots.com/node/33388
+
+
+XXXX
+Clive Webster (Webbot)
+http://www.societyofrobots.com/member_tutorials/node/211
+
+http://www.speechchips.com/shop/
+http://www.speechchips.com/shop/item.aspx?itemid=22
+http://www.speechchips.com/shop/category.aspx?catid=3
+
+XX?
+http://brittonkerin.com/cduino/
