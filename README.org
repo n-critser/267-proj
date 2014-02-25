@@ -148,6 +148,13 @@ http://arduino.cc/en/uploads/Main/arduino-uno-schematic.pd
 * AVR-info
 http://download-mirror.savannah.gnu.org/releases//avrdude/avrdude-doc-5.10.pdf
 * Links 
+** 8kHZ audio
+Cool site with a bunch of weird links to audio related stuff.
+seems like 8kHz might be the max for arduino sound 
+http://transistor-man.com/Rage_against_the_arduino.html
+
+
+** Everything else
 http://code.google.com/p/tinkerit/wiki/Cantarino
 http://forum.arduino.cc/index.php?topic=49654.0
 http://forum.arduino.cc/index.php/topic,136758.0.html
