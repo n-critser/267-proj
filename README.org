@@ -19,29 +19,32 @@ the dedicated speech board.
 react to the serial output pushed to the speech module.    
 
 * Components
-** Speakers
-** Arduino Uno - 2 boards (1 for speech , 1 for everything else)
+** Adafruit waveshield sd card module
+** Speaker
+** Arduino Uno - 1 boards 
 ** Battery pack/ ON-Off
-** 4-3*3 led matrices for simulated lip movement
-** shift registers
+** 2-8x8 i2c led matrices for simulated eye movement
+** adafruit libraries for graphics and sound
+
 * TASKS
-** DONE 1st iteration Makefile 
-   DEADLINE: <2014-02-04 Tue>
-** TODO Chris Kuethe tutorial seperate dir
-** TODO Serial input from keyboard
-   DEADLINE: <2014-02-12 Wed>
-** TODO Serial 2 way commune
-** TODO Text to speach testing for arduino
-   DEADLINE: <2014-02-12 Wed>
+** TODO LED eye movement
+   DEADLINE: <2014-03-11 Tue>
+** TODO adafruit WaveShield with SD
+   DEADLINE: <2014-03-21 Fri>
+** TODO Talking testing for arduino
+   DEADLINE: <2014-03-26 Wed>
 ** TODO ?   Using a SD card for storage
    DEADLINE: <2014-02-14 Fri>
 ** TODO Using libraries in C
    DEADLINE: <2014-02-07 Fri>
 ** TODO Accessing storage in C
    DEADLINE: <2014-02-09 Sun>
-** TODO Parts list for "project"
+** DONE Parts list for "project"
    DEADLINE: <2014-02-09 Sun>
-
+** DONE 1st iteration Makefile 
+   DEADLINE: <2014-02-04 Tue>
+** DONE Chris Kuethe tutorial seperate dir
+   
 * SERIAL 
 ** Output
 -this does get the output from the serial port 
