@@ -46,6 +46,14 @@ react to the serial output pushed to the speech module.
 ** DONE Chris Kuethe tutorial seperate dir
    
 * SERIAL 
+** Unix
+BEGIN_SRC
+$ dmesg  --->> output for all usb connected devices
+
+sudo adduser -a -G serial nc_chaos 
+END_SRC
+
+
 ** Output
 -this does get the output from the serial port 
 cat /dev/ttyACM0 
