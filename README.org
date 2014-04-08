@@ -45,6 +45,10 @@ react to the serial output pushed to the speech module.
    DEADLINE: <2014-02-04 Tue>
 ** DONE Chris Kuethe tutorial seperate dir
    
+* SD cards
+** directory on chaos 
+$ cp *.wav /media/chaos/4E35-D435
+
 * SERIAL 
 ** Output
 -this does get the output from the serial port 
