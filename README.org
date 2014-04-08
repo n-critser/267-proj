@@ -52,6 +52,40 @@ react to the serial output pushed to the speech module.
 ** directory on chaos 
 $ cp *.wav /media/chaos/4E35-D435
 https://learn.adafruit.com/adafruit-wave-shield-audio-shield-for-arduino/wavehc-library
+* DATA 
+
+http://www.rowleydownload.co.uk/avr/documentation/index.htm?http://www.rowleydownload.co.uk/avr/documentation/strncmp_P.htm
+http://www.nongnu.org/avr-libc/user-manual/group__avr__pgmspace.html
+
+
+** INstructions
+<pgmspace.h>
+Miscellaneous functions
+strlen_P	Calculate length of a code string
+Formatted output functions
+printf_P	Write code string formatted text to standard output
+snprintf_P	Write code string formatted text to a string with truncation
+sprintf_P	Write code string formatted text to a string
+vprintf_P	Write code string formatted text to standard output using variable argument context
+vsnprintf_P	Write code string formatted text to a string with truncation using variable argument context
+vsprintf_P	Write code string formatted text to a string using variable argument context
+Copying functions
+memcpy_P	Copy code memory to data memory
+strcat_P	Concatenate a code string to a data string
+strcpy_P	Copy code string to data string
+strncpy_P	Copy code string to data string up to a maximum length
+Formatted input functions
+scanf_P	Read code string formatted text from standard input
+sscanf_P	Read code string formatted text from code string
+vscanf_P	Read code string formatted text from standard using variable argument context
+vsscanf_P	Read code string formatted text from a string using variable argument context
+Character and string I/O functions
+puts_P	Write a code string to standard output
+Comparison functions
+memcmp_P	Compare code memory with data memory
+strcmp_P	Compare a code string to a data string
+strncmp_P	Compare a code string to a data string up to a maximum length
+
 * SERIAL 
 ** Unix
 BEGIN_SRC
