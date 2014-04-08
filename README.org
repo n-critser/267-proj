@@ -51,7 +51,7 @@ react to the serial output pushed to the speech module.
 * SD cards
 ** directory on chaos 
 $ cp *.wav /media/chaos/4E35-D435
-
+https://learn.adafruit.com/adafruit-wave-shield-audio-shield-for-arduino/wavehc-library
 * SERIAL 
 ** Unix
 BEGIN_SRC
