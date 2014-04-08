@@ -27,9 +27,12 @@ react to the serial output pushed to the speech module.
 ** adafruit libraries for graphics and sound
 
 * TASKS
-** TODO LED eye movement
+** TODO On/ Off switch
+** TODO 2 buttons for Binary Search
+** TODO TEST WaveShield with Eyes
+** STARTED LED eye movement
    DEADLINE: <2014-03-11 Tue>
-** TODO adafruit WaveShield with SD
+** STARTED adafruit WaveShield with SD
    DEADLINE: <2014-03-21 Fri>
 ** TODO Talking testing for arduino
    DEADLINE: <2014-03-26 Wed>
@@ -50,6 +53,14 @@ react to the serial output pushed to the speech module.
 $ cp *.wav /media/chaos/4E35-D435
 
 * SERIAL 
+** Unix
+BEGIN_SRC
+$ dmesg  --->> output for all usb connected devices
+
+sudo adduser -a -G serial nc_chaos 
+END_SRC
+
+
 ** Output
 -this does get the output from the serial port 
 cat /dev/ttyACM0 
