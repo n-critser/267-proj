@@ -27,6 +27,9 @@ react to the serial output pushed to the speech module.
 ** adafruit libraries for graphics and sound
 
 * TASKS
+** TODO play file  based on name of file
+** TODO complete all audio for 1 - 16
+** TODO connect eyes to audio 
 ** TODO On/ Off switch
 ** TODO 2 buttons for Binary Search
 ** TODO TEST WaveShield with Eyes
@@ -34,13 +37,13 @@ react to the serial output pushed to the speech module.
    DEADLINE: <2014-03-11 Tue>
 ** STARTED adafruit WaveShield with SD
    DEADLINE: <2014-03-21 Fri>
-** TODO Talking testing for arduino
+** DONE Talking testing for arduino
    DEADLINE: <2014-03-26 Wed>
-** TODO ?   Using a SD card for storage
+** DONE ?   Using a SD card for storage
    DEADLINE: <2014-02-14 Fri>
-** TODO Using libraries in C
+** DONE Using libraries in C
    DEADLINE: <2014-02-07 Fri>
-** TODO Accessing storage in C
+** DONE Accessing storage in C
    DEADLINE: <2014-02-09 Sun>
 ** DONE Parts list for "project"
    DEADLINE: <2014-02-09 Sun>
