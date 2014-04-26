@@ -7,12 +7,14 @@
 SdReader card;    // This object holds the information for the card
 FatVolume vol;    // This holds the information for the partition on the card
 FatReader root;   // This holds the information for the volumes root directory
+FatReader f;      // A FatReader instance other than root, needed for selecting files for wave object
+
 WaveHC wave;      // This is the only wave (audio) object, since we will only play one at a time
 
 uint8_t dirLevel; // indent level for file/dir names    (for prettyprinting)
 dir_t dirBuf;     // buffer for directory reads
 
-
+#define DEBOUNCE 100   //button debouncer
 /*
  * Define macro to put error messages in flash memory
  */
@@ -20,7 +22,9 @@ dir_t dirBuf;     // buffer for directory reads
 
 // Function definitions (we define them here, but the code is below)
 void play(FatReader &dir);
-
+void storeEntryName(char name[], dir_t &dir);
+void playcomplete(char *name);
+void playfile(char *name);
 //////////////////////////////////// SETUP
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps for debugging
@@ -162,4 +166,31 @@ void play(FatReader &dir) {
       }
     }
   }
+}
+
+// Plays a full file from beginning to end with no pause.
+void playcomplete(char *name) {
+// call our helper to find and play this name
+playfile(name);
+while (wave.isplaying) {
+// do nothing while its playing
+}
+// now its done playing
+}
+ 
+void playfile(char *name) {
+// see if the wave object is currently doing something
+if (wave.isplaying) {// already playing something, so stop it!
+wave.stop(); // stop it
+}
+// look in the root directory and open the file
+if (!f.open(root, name)) {
+putstring("Couldn't open file "); Serial.print(name); return;
+}
+// OK read the file and turn it into a wave object
+if (!wave.create(f)) {
+putstring_nl("Not a valid WAV"); return;
+}
+// ok time to play! start playback
+wave.play();
 }
