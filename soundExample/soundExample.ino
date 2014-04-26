@@ -97,6 +97,8 @@ void sdErrorCheck(void) {
   Serial.println(card.errorData(), HEX);
   while(1);
 }
+<<<<<<< HEAD
+=======
 
 void storeEntryName(char name[], dir_t &dir){
   uint8_t j = 0;
@@ -108,6 +110,7 @@ void storeEntryName(char name[], dir_t &dir){
   name[j]=0;
 }
 
+>>>>>>> a3d6475560e2a7972903287ef50e6108c84859a9
 /*
  * play recursively - possible stack overflow if subdirectories too nested
  */
@@ -139,6 +142,17 @@ void play(FatReader &dir) {
       play(file);                         // recursive!
       dirLevel -= 2;    
     }
+<<<<<<< HEAD
+    char * name;
+    name= "eqEight";
+     if ( name){  //== operator doesn't work Compare name 
+     //strncmp_P
+      // Aha! we found a file that isnt a directory
+      putstring("Playing ");
+      printEntryName(dirBuf);              // print it out
+      
+      
+=======
     else {
       // Aha! we found a file that isnt a directory
       putstring("Playing ");
@@ -148,6 +162,7 @@ void play(FatReader &dir) {
       char name[11];
       storeEntryName(name,dirBuf);
       Serial.println(name);
+>>>>>>> a3d6475560e2a7972903287ef50e6108c84859a9
       
       if (!wave.create(file)) {            // Figure out, is it a WAV proper?
         putstring(" Not a valid WAV");     // ok skip it
