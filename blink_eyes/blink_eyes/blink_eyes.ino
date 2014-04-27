@@ -17,6 +17,12 @@
 
   Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
+  
+  UNO PINS ----------------------------------------------
+  
+  analog #5 = CLK
+  analog #4 = DAT
+   
  ****************************************************/
 
 #include <Wire.h>
@@ -28,6 +34,8 @@ Adafruit_8x8matrix matrixRight = Adafruit_8x8matrix();
 
 void setup() {
   Serial.begin(9600);
+  digitalWrite(19, HIGH); //set digital13 to high 
+
   Serial.println("8x8 LED Matrix Test");
   
   matrixLeft.begin(0x70);  // pass in the address

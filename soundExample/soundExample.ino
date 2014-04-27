@@ -3,6 +3,12 @@
  */
 #include <WaveHC.h>
 #include <WaveUtil.h>
+#include <Wire.h>
+#include "Adafruit_LEDBackpack.h"
+#include "Adafruit_GFX.h"
+
+Adafruit_8x8matrix matrixLeft = Adafruit_8x8matrix();
+Adafruit_8x8matrix matrixRight = Adafruit_8x8matrix();
 
 SdReader card;    // This object holds the information for the card
 FatVolume vol;    // This holds the information for the partition on the card
@@ -14,22 +20,87 @@ WaveHC wave;      // This is the only wave (audio) object, since we will only pl
 uint8_t dirLevel; // indent level for file/dir names    (for prettyprinting)
 dir_t dirBuf;     // buffer for directory reads
 
-#define DEBOUNCE 100   //button debouncer
+//#define DEBOUNCE 100   //button debouncer
 /*
  * Define macro to put error messages in flash memory
  */
 #define error(msg) error_P(PSTR(msg))
 
+const uint8_t button = 12;  //True
+const long  DEBOUNCE = 100;
+
+byte Start_Flag = 1;
+byte Win_Flag = 0;
+long  last_debounce_time = 0;
+
+//const uint8_t b12 = 12;  //false
 // Function definitions (we define them here, but the code is below)
 void play(FatReader &dir);
 void storeEntryName(char name[], dir_t &dir);
 void playcomplete(char *name);
 void playfile(char *name);
+
+static const uint8_t PROGMEM
+  open_leftEye_bmp[] =
+  { B00111100,
+    B01000100,
+    B10011010,
+    B10100101,
+    B10100101,
+    B10011001,
+    B01000010,
+    B00111100 },
+    open_rightEye_bmp[] =
+  { B00111100,
+    B01000010,
+    B10011001,
+    B10100101,
+    B10100101,
+    B10011001,
+    B01000010,
+    B00111100 },
+    
+   closeEye_bmp[] =
+  { B00000000,
+    B00000000,
+    B00111000,
+    B01000110,
+    B11111111,
+    B00000000,
+    B00000000,
+    B00000000 },
+    slit_bmp[] =
+    {B00000000,
+    B00000000,
+    B00000000,
+    B00000000,
+    B11111111,
+    B00000000,
+    B00000000,
+    B00000000 },
+      
+ slant_rightEye_bmp[] =
+  { B10000000,
+    B00100000,
+    B00001000,
+    B00010100,
+    B00100010,
+    B01000111,
+    B00101110,
+    B00011100 };
 //////////////////////////////////// SETUP
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps for debugging
   
   putstring_nl("\nWave test!");  // say we woke up!
+  pinMode(button, INPUT);
+  digitalWrite(button, HIGH);   //SET button to high
+  //pinMode(b12, INPUT);
+  //digitalWrite(19, HIGH);        // SET digital 13 to high
+  //digitalWrite(18, HIGH);        // SET digital 12 to high
+  /*I2C addresses given to each matrix  */
+  matrixLeft.begin(0x70);  // pass in the address
+  matrixRight.begin(0x71);
   
   putstring("Free RAM: ");       // This can help with debugging, running out of RAM is bad
   Serial.println(FreeRam());
@@ -72,8 +143,131 @@ void setup() {
 
 //////////////////////////////////// LOOP
 void loop() {
-  root.rewind();
-  play(root);
+          /*EYES BLINKING BEHAVIOR   */
+  if ( Win_Flag  ){
+      Serial.println("YOU WIN !!!!!!!!!!!");
+  }    
+          
+  if ( Start_Flag ){
+      Serial.println( "STARTING NEW GAME ");
+      playcomplete("ENTNUM.WAV");
+  }
+  Start_Flag = 0; 
+  eye_move();
+  
+  if ( check_switches () ){
+    Serial.println ("PLAYING NUM4.WAV");
+    playcomplete ( "NUM4.WAV");
+    
+    eye_move();
+    
+    
+  }
+  
+
+  playcomplete("NUM8.WAV");
+  
+  delay(200);
+  eye_move();
+  
+  delay(200);
+  switch(check_switches()){
+   case 1:
+    playcomplete("NUM2.WAV"); //THIS SHOULD BE THE WIN CONDITION
+    break;
+   case 2:
+     playcomplete ("GT8.WAV"); //
+  }
+  
+  delay(200);
+  //playcomplete("GT8.WAV");  
+  
+  eye_move();
+  //matrixLeft.clear();
+  //matrixLeft.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
+  //matrixLeft.writeDisplay();
+  //delay(500);
+  
+  //playcomplete("NUM4.WAV");
+  switch(check_switches()){
+   case 1:
+    playcomplete("NUM2.WAV"); //THIS SHOULD BE THE WIN CONDITION
+    break;
+   case 2:
+     playcomplete ("GT8.WAV"); //
+  }
+  eye_move();
+  
+  //playcomplete("GT4.WAV");
+  //root.rewind();
+  //play(root);
+
+
+
+}
+
+byte check_switches(){
+    Serial.println("check_switches");
+    //static long db_time= millis();
+    //static byte previous[2];
+    //static long time[2];
+    byte reading;
+    byte pressed;
+    byte index = 1;
+    pressed = 0;
+    delay(100);
+    Serial.print("pressed:");
+    Serial.println(pressed);
+    
+    Serial.print("last_debounce_time:");
+    Serial.println(last_debounce_time);
+    
+    //for (byte index = 0; index < 2; ++index) {
+    reading = digitalRead(button);
+    Serial.print("Reading:");
+    Serial.println(reading);
+    //if (reading == HIGH  && millis() - last_debounce_time > DEBOUNCE){
+    // switch pressed
+    
+    if (reading == HIGH) {   // removed all the debounce from decision for now !
+      Serial.println("ENTERING BUTTON PUSH REGION");
+      last_debounce_time = millis();
+      pressed = index + 1; //value of pressed
+    //break;
+    }
+    //previous[index] = reading;
+    //}
+    // return switch number (1 - 2)
+    
+    Serial.print("pressed");
+    Serial.println(pressed);
+    return (pressed);
+}
+
+
+void eye_move(){
+  
+  //Serial.println("EYE MOVE");
+    matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, open_rightEye_bmp, 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(250);
+
+  matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, open_leftEye_bmp, 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(250);
+  
+  matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(500);
+  
+  matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(500);
+  //Serial.println("LEAVE EYEMOVE");
 }
 
 /////////////////////////////////// HELPERS
@@ -97,8 +291,6 @@ void sdErrorCheck(void) {
   Serial.println(card.errorData(), HEX);
   while(1);
 }
-<<<<<<< HEAD
-=======
 
 void storeEntryName(char name[], dir_t &dir){
   uint8_t j = 0;
@@ -110,7 +302,6 @@ void storeEntryName(char name[], dir_t &dir){
   name[j]=0;
 }
 
->>>>>>> a3d6475560e2a7972903287ef50e6108c84859a9
 /*
  * play recursively - possible stack overflow if subdirectories too nested
  */
@@ -142,18 +333,21 @@ void play(FatReader &dir) {
       play(file);                         // recursive!
       dirLevel -= 2;    
     }
-<<<<<<< HEAD
-    char * name;
-    name= "eqEight";
-     if ( name){  //== operator doesn't work Compare name 
-     //strncmp_P
-      // Aha! we found a file that isnt a directory
-      putstring("Playing ");
-      printEntryName(dirBuf);              // print it out
-      
-      
-=======
+
     else {
+ 
+      putstring("CLOSE EYE ");
+       matrixRight.clear();
+       matrixRight.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
+       matrixRight.writeDisplay();
+       delay(500);
+  
+        putstring("CLOSE EYE");
+       matrixLeft.clear();
+       matrixLeft.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
+       matrixLeft.writeDisplay();
+       delay(500);
+  
       // Aha! we found a file that isnt a directory
       putstring("Playing ");
       printEntryName(dirBuf);       // print it out
@@ -162,7 +356,6 @@ void play(FatReader &dir) {
       char name[11];
       storeEntryName(name,dirBuf);
       Serial.println(name);
->>>>>>> a3d6475560e2a7972903287ef50e6108c84859a9
       
       if (!wave.create(file)) {            // Figure out, is it a WAV proper?
         putstring(" Not a valid WAV");     // ok skip it
