@@ -27,16 +27,23 @@ react to the serial output pushed to the speech module.
 ** adafruit libraries for graphics and sound
 
 * TASKS
-** TODO play file  based on name of file
+** TODO branching with SOUND 
+http://digitalmedia.risd.edu/pbadger/PhysComp/pmwiki/pmwiki.php?n=Devices.WaveShield
+
+https://learn.adafruit.com/halloween-pumpkin/step-2
+
+
+
+** TODO 2 buttons for Binary Search
 ** TODO complete all audio for 1 - 16
 ** TODO connect eyes to audio 
 ** TODO On/ Off switch
-** TODO 2 buttons for Binary Search
 ** TODO TEST WaveShield with Eyes
 ** STARTED LED eye movement
    DEADLINE: <2014-03-11 Tue>
-** STARTED adafruit WaveShield with SD
+** DONE adafruit WaveShield with SD
    DEADLINE: <2014-03-21 Fri>
+** DONE play file  based on name of file
 ** DONE Talking testing for arduino
    DEADLINE: <2014-03-26 Wed>
 ** DONE ?   Using a SD card for storage
