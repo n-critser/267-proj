@@ -1,0 +1,62 @@
+#+TITLE: 267_writeup.org
+#+AUTHOR: N-CRITSER
+#+DATE: <2014-05-06 Tue>
+#+LATEX_CLASS:article
+#+LATEX_CLASS_OPTIONS: [a4paper,6pt]
+#+OPTIONS: H:2 num:t toc:nil \n:nil @:t ::t |:t ^:{} _:{} *:t TeX:t LaTeX:t
+#+LATEX_HEADER: \usepackage[margin=.75in]{geometry}
+#+LaTeX_HEADER: \usepackage[T1]{fontenc} 
+#+LaTeX_HEADER: \usepackage[scaled=.7]{helvet} 
+#+LaTeX_HEADER: \usepackage{courier} % tt
+#+LaTeX_HEADER: \linespread{1.01}
+
+
+
+* Abstract "TALK-A-LOT-BOT"
+    My original goal for this project was to learn the underlying code for 
+the Arduino platform while creating an anthropomorphic entity which "speaks"
+and simulates eye movement while interacting with a user.  The general aspects
+of this I have achieved, although I have adopted the usage of higher level 
+libraries and forgone the learning of lower level aspects of the platform.  
+
+    Currently the Talk-a-lot-Bot has as its central processing unit a Rev3 
+Arduino Uno with an Ada-fruit Waveshield mounted to its I/O headers. The shield
+controls the robots "voice".  Pre-recorded .WAV files are stored on a 
+Fat 16 Formatted SD card.  This prerecording of all audio output does 
+create a limitation on the flexibility of the Talk-a-lot-Bot.  But I strive 
+to overcome this lack of natural randomness by introducing some irrationality
+into the the output.  The wave files are chosen programmatically based on 
+flags which are set as the running loop progresses.  Given a short amount of 
+time the output could cycle but based on the flagging component it should not 
+be an identical path through the wave file tree structure.  
+
+    When a wave file is chosen it is played through the WaveHC library which
+sends its wave file object through a low pass filter and opamp then to 
+a stereo plug connector which sends the sound signal  to a speaker.  
+
+Also, connected to the Uno, are 2 8x8 LED matrices, which are I2C protocol driven. 
+The matrices cycle through various eye movements depending on the playing 
+.WAV file.  All of this output can be manipulated (somewhat) by a button pad
+with a 2 button option.  For most of the sound output the user is prompted by
+the bot, to reply to some query.  Upon receiving an answer the bot responds,
+not always in an intelligent manner.  In fact, It's my goal to give the bot
+the sense of having some type of mental defect similar to Parry,
+http://en.wikipedia.org/wiki/PARRY.   After, some testing I found that I had
+more fun listening to Talk-a-lot, when he was being "Crazy" rather than 
+attempting to interact in a prescribed "Boring" manner. 
+
+* Components
+** Adafruit waveshield sd card module
+** Speaker
+** Arduino Uno Rev3 
+** Battery pack/ ON-Off
+** 2-8x8 i2c led matrices for simulated eye movement
+** adafruit libraries for graphics and sound
+
+* Libraries
+#include "Adafruit_LEDBackpack.h"
+#include "Adafruit_GFX.h"
+
+* Wiring Diagram
+--#+ATTR_LATEX: :width 8cm :options angle=0
+-[ [./cache1.png]]

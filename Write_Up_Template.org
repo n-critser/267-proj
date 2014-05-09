@@ -1,0 +1,67 @@
+#+TITLE: Write_Up_Template.org
+#+AUTHOR: N-CRITSER
+#+DATE: <2014-05-06 Tue>
+#+LATEX_CLASS:article
+#+LATEX_CLASS_OPTIONS: [a4paper,6pt]
+#+OPTIONS: H:2 num:t toc:nil \n:nil @:t ::t |:t ^:{} _:{} *:t TeX:t LaTeX:t
+#+LATEX_HEADER: \usepackage[margin=.75in]{geometry}
+#+LaTeX_HEADER: \usepackage[T1]{fontenc} 
+#+LaTeX_HEADER: \usepackage[scaled=.7]{helvet} 
+#+LaTeX_HEADER: \usepackage{courier} % tt
+#+LaTeX_HEADER: \linespread{1.01}
+
+
+
+
+
+#+BEGIN_SRC
+machine has a 500MHz system clock
+500MHz = 2ns clock rate
+hit time = 1 cycle
+miss penalty = 20 cycles
+instruction cache miss rate = 5%
+
+#+END_SRC
+
+
+#+BEGIN_LATEX
+&a base CPI of 2 clock cycles\\
+&instruction miss rate = 8\%\\
+&data miss rate = 10\%\\
+&30\% of all instructions contain one data reference\\
+&miss penalty = 16 cycles\\
+&CPI = 2.0 \\
+ImissCycles = .08  * 16= 1.28\\
+DmissCycles = .10 * .30 * 16 = 0.48\\
+ 
+
+a) What is the actual CPI?\\
+Actual CPI = CPI + Imiss + Dmiss\\
+           = 2.0 + 1.28 + .48\\
+           = 3.76\\
+b) How much slower is it than the ideal CPI?\\
+\begin{equation}
+\frac {3.76}{ 2.0 } = 1.88\; times slower than ideal\\
+\end{equation}
+#+END_LATEX
+
+
+--#+ATTR_LATEX: :width 8cm :options angle=0
+-[ [./cache1.png]]
+
+
+#+ATTR_LATEX: :options [Table size]
+#+BEGIN_LATEX
+&48 - 15 = 33\\
+&32 = 2^5\\ 
+&2^{33} * 2^5 * N \frac {bytes}{PTE}= 2^{38} * N bytes for all page table\\
+&                                 \ = 2^3 * 1GB *N = 8GB * N\\
+#+END_LATEX
+
+
+#+ATTR_LATEX: 
+| word add | bin Add      | tag     | index  | hit/miss  | 
+|   1      |   000000 0 1 | 000000  |  0     |   M       | 
+|  134     |   100001 1 0 | 100001  |  1     |   M       |
+|  212     |   110101 0 0 | 110101  |  0     |   M       |
+|   1      |   000000 0 1 | 000000  |  0     |      H    |
