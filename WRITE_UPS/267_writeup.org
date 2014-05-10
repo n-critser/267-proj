@@ -49,14 +49,15 @@ attempting to interact in a prescribed "Boring" manner.
 ** Adafruit waveshield sd card module
 ** Speaker
 ** Arduino Uno Rev3 
-** Battery pack/ ON-Off
 ** 2-8x8 i2c led matrices for simulated eye movement
 ** adafruit libraries for graphics and sound
 
 * Libraries
+#+BEGIN_SRC
 #include "Adafruit_LEDBackpack.h"
-#include "Adafruit_GFX.h"
 
+#include "Adafruit_GFX.h"
+#+END_SRC
 * Wiring Diagram
---#+ATTR_LATEX: :width 8cm :options angle=0
--[ [./cache1.png]]
+#+ATTR_LATEX: :width 16cm :options angle=0
+[[./talk_a_lot_fritz_bb.png]]
