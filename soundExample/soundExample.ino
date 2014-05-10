@@ -26,15 +26,16 @@ OUCH.WAV
 PAY_ATN.WAV  
 
 WADIMEAN.WAV  
+*/
 
 
+char
+  wav0[]   = "HELLO.WAV",
+  wav1[]   = "OUCH.WAV",
+  wav2[]   = "PAY_ATN.WAV",
+  wav3[]   = "DNT_TCH.WAV";
 
-PROGMEM const char
-  wav0[]   = "pay_atn.wav",
-  wav1[]   = "ouch.wav",
-  wav2[]   = "hello.wav";
-
-
+/*
 const char *wavname[]= { wav0, wav1, wav2 };
 */
 SdReader card;    // This object holds the information for the card
@@ -59,8 +60,8 @@ dir_t dirBuf;     // buffer for directory reads
 // Function definitions (we define them here, but the code is below)
 void play(FatReader &dir);
 void storeEntryName(char name[], dir_t &dir);
-void playcomplete(char *name);
-void playfile(char *name);
+void playcomplete( char *name);
+void playfile( char *name);
 
 static const uint8_t PROGMEM
   open_leftEye_bmp[] =
@@ -136,20 +137,35 @@ const long  DEBOUNCE = 100;
 byte Start_Flag = 1;
 byte Win_Flag = 0;
 long  last_debounce_time = 0;
-int switchPin = 11;
-uint8_t pin_flag= 1;
+uint8_t switch0  = 0;
+uint8_t switch1 = 1;
+uint8_t switch11 = 11;
+
+uint8_t pin_flag= 0; // pin_flag carries the button value to the audio logic
 //////////////////////////////////// SETUP
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps for debugging
   
   putstring_nl("\nTalk-a-lot-Bot!");  // say we woke up!
-  pinMode(switchPin, INPUT);
-  digitalWrite(switchPin, HIGH);   //SET button to high
-//for (uint8_t k= 11; k < 14; k++)  
+  
+  //for (uint8_t k= 11; k < 14; k++)  
+/*
+  Set Button Pins to High for user to tell Button Input is Working
+*/
+  pinMode(switch0, INPUT);
+  digitalWrite(switch0, HIGH);   //SET button to high
+  
 
-  /*I2C addresses given to each matrix  */
+  pinMode(switch11, INPUT);
+  digitalWrite(switch11, HIGH);   //SET button to high
+  
+   pinMode(switch1, INPUT);
+  digitalWrite(switch1, HIGH);   //SET button to high
+
+/*I2C addresses given to each matrix  */
   matrixLeft.begin(0x70);  // pass in the address
   matrixRight.begin(0x71);
+  
   
   putstring("Free RAM: ");       // This can help with debugging, running out of RAM is bad
   Serial.println(FreeRam());
@@ -197,89 +213,68 @@ void setup() {
 /// LADY ADA : http://www.ladyada.net/learn/arduino/lesson5.html
 //////////////////////////////////// LOOP
 void loop() {
-  uint8_t swp = digitalRead(switchPin);
+  uint8_t swp0 = digitalRead(switch0);
+  uint8_t swp11 = digitalRead(switch11);
+  uint8_t swp1 = digitalRead(switch1);
   //pin_flag 
   Serial.print("pin_flag = ");
   Serial.println(pin_flag);
   uint8_t i;
           /*EYES BLINKING BEHAVIOR   */
-  if ( Win_Flag  ){
-      Serial.println("YOU WIN !!!!!!!!!!!");
-  }    
-          
-  if ( Start_Flag ){
-      //Serial.println( "STARTING NEW GAME ");
-      //playcomplete("ENTNUM.WAV");
+ 
+/* Start the eyes with a wide eye and then a blink */
+ 
+ /* Beginning WaveFile */   
+ if ( Start_Flag ){
+      Serial.println( "STARTING");
+      playcomplete(wav0);
   }
   Start_Flag = 0; 
   eye_move();
-  //Serial.print("Whats the btnCount= ");
-  //Serial.println(btnCount);
-  
- Serial.println("REading button");
- Serial.println(swp);
+
+
+
+
+  if (pin_flag==10){   
+   playcomplete("BAKERY.WAV");
+   Serial.println("Playing sound");
+ }
+ 
+ 
  if (pin_flag==1){
    
    playcomplete("HELLO.WAV");
    Serial.println("Playing sound");
  }
- /* if ( check_switches () ){
-    Serial.println ("PLAYING NUM4.WAV");
-    //playcomplete ( "NUM4.WAV");
-    
-    eye_move();
-    
-    
-  }
-
- // Scan buttons 6, 7, 8 looking for first button pressed...
- //for(i=0; (i<3) && (digitalRead(i+11) == LOW); i++);
-   Serial.println("REading button");
-   Serial.println(digitalRead(11));
-  if(i < 3) {               // Anything pressed?  Yes!
-    if(i == prevBtn) {      // Same as last time we checked?  Good!
-      if(++btnCount == 3) { // 3 passes to 'debounce' button input
-        
-        playcomplete("HELLO.WAV");
-        //playfile((char *)pgm_read_word(&wavname[i])); // Start WAV
-        // Look up animation sequence # corresponding to this WAV...
-        //seq            = (uint8_t *)pgm_read_word(&anim[i]);
-        idx            = 0; // Begin at first byte of data
-        //newPos         = pgm_read_byte(&seq[idx++]); // Initial mouth pos
-        //mouthCountdown = pgm_read_byte(&seq[idx++]); // Hold time for pos
-        Serial.println("REading button");
-        Serial.println(digitalRead(11));
-      }
-    } else btnCount = 0; // Different button than before - start count over
-    prevBtn = i;
-  } else {
-    prevBtn = 99;   // No buttons pressed
-    btnCount=0;
-  }
-  */
+ 
+ if (pin_flag==11){
+   
+   playcomplete("BTHR_ME.WAV");
+   Serial.println("Playing sound");
+ }
+  delay(30);
   
- Serial.println("REading button");
- Serial.println(digitalRead(switchPin));
- if (swp == LOW){
-   Serial.print("pin_flag = ");
-   Serial.println(pin_flag);
-   pin_flag = 1;
+ 
+ if (swp0 == LOW){
+   Serial.println("REading button 0");
+   Serial.println(swp0);
+   pin_flag = 10;
+ } 
+ else if (swp11 == LOW){
+
+   Serial.println("REading button 11");
+   Serial.println(swp11);
+   pin_flag = 11;
+ } else if (swp1 == LOW){
+     Serial.println("REading button 1");
+     Serial.println(swp1);
+     pin_flag = 1;
  } else {
    pin_flag = 0;
  }
  Serial.print("pin_flag = ");
    Serial.println(pin_flag);
   eye_move();
- 
-  delay(100);
-  //playcomplete("PAY_ATN.WAV");  
-  
-  //eye_move();
-  //matrixLeft.clear();
-  //matrixLeft.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
-  //matrixLeft.writeDisplay();
-  //delay(500);
-  
  
   eye_move();
   
@@ -291,43 +286,6 @@ void loop() {
 
 }
 
-byte check_switches(){
-    Serial.println("check_switches");
-    //static long db_time= millis();
-    //static byte previous[2];
-    //static long time[2];
-    byte reading;
-    byte pressed;
-    byte index = 1;
-    pressed = 0;
-    delay(100);
-    Serial.print("pressed:");
-    Serial.println(pressed);
-    
-    Serial.print("last_debounce_time:");
-    Serial.println(last_debounce_time);
-    
-    //for (byte index = 0; index < 2; ++index) {
-    //reading = digitalRead(b12 );
-    Serial.print("Reading:");
-    Serial.println(reading);
-    //if (reading == HIGH  && millis() - last_debounce_time > DEBOUNCE){
-    // switch pressed
-    
-    if (reading == HIGH) {   // removed all the debounce from decision for now !
-      Serial.println("ENTERING BUTTON PUSH REGION");
-      last_debounce_time = millis();
-      pressed = index + 1; //value of pressed
-    //break;
-    }
-    //previous[index] = reading;
-    //}
-    // return switch number (1 - 2)
-    
-    Serial.print("pressed");
-    Serial.println(pressed);
-    return (pressed);
-}
 
 
 void eye_move(){
@@ -462,7 +420,7 @@ void play(FatReader &dir) {
 }
 
 // Plays a full file from beginning to end with no pause.
-void playcomplete(char *name) {
+void playcomplete( char *name) {
 // call our helper to find and play this name
 playfile(name);
 while (wave.isplaying) {
@@ -472,7 +430,7 @@ while (wave.isplaying) {
 }
 
 
-void playfile(char *name) {
+void playfile( char *name) {
 // see if the wave object is currently doing something
 if (wave.isplaying) {// already playing something, so stop it!
 wave.stop(); // stop it
