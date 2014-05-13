@@ -1,4 +1,7 @@
-/*
+/* Much of the code for this sketch comes from the github repo below 
+ * https://raw.githubusercontent.com/sebleedelisle/moonlander-trails/master/Arduino/libraries/Adafruit_LEDBackpack/examples/wavface/wavface.pde
+ * 'wavface' example sketch for Adafruit I2C 8x8 LED backpacks
+ * and Wave Shield:
  * This example plays every .WAV file it finds on the SD card in a loop
  * Conversations with the original Parry taken from 
  * https://tools.ietf.org/html/rfc439
@@ -12,32 +15,6 @@
 Adafruit_8x8matrix matrixLeft = Adafruit_8x8matrix();
 Adafruit_8x8matrix matrixRight = Adafruit_8x8matrix();
 
-/*
-BAKERY.WAV  
-
-BTHR_ME.WAV  
-
-DNT_TCH.WAV  
-
-HELLO.WAV  
-
-OUCH.WAV  
-
-PAY_ATN.WAV  
-
-WADIMEAN.WAV  
-*/
-
-
-char
-  wav0[]   = "HELLO.WAV",
-  wav1[]   = "OUCH.WAV",
-  wav2[]   = "PAY_ATN.WAV",
-  wav3[]   = "DNT_TCH.WAV";
-
-/*
-const char *wavname[]= { wav0, wav1, wav2 };
-*/
 SdReader card;    // This object holds the information for the card
 FatVolume vol;    // This holds the information for the partition on the card
 FatReader root;   // This holds the information for the volumes root directory
@@ -48,7 +25,7 @@ WaveHC wave;      // This is the only wave (audio) object, since we will only pl
 uint8_t dirLevel; // indent level for file/dir names    (for prettyprinting)
 dir_t dirBuf;     // buffer for directory reads
 
-//#define DEBOUNCE 100   //button debouncer
+
 /*
  * Define macro to put error messages in flash memory
  */
@@ -65,35 +42,35 @@ void playfile( char *name);
 
 static const uint8_t PROGMEM
   open_leftEye_bmp[] =
-  { B00111100,
-    B01000100,
-    B10011010,
-    B10100101,
-    B10100101,
-    B10011001,
-    B01000010,
-    B00111100 },
+  { B00000000,
+    B00000000,
+    B00011000,
+    B00111110,
+    B00111110,
+    B00111000,
+    B00000000,
+    B00000000 },
     open_rightEye_bmp[] =
-  { B00111100,
-    B01000010,
-    B10011001,
-    B10100101,
-    B10100101,
-    B10011001,
-    B01000010,
-    B00111100 },
+  { B00000000,
+    B00000000,
+    B00011000,
+    B01111100,
+    B01111100,
+    B00011000,
+    B00000000,
+    B00000000 },
     
    closeEye_bmp[] =
   { B00000000,
     B00000000,
     B00111000,
-    B01000110,
+    B01111110,
     B11111111,
-    B00000000,
+    B00111100,
     B00000000,
     B00000000 },
     slit_bmp[] =
-    {B00000000,
+  { B00000000,
     B00000000,
     B00000000,
     B00000000,
@@ -111,16 +88,57 @@ static const uint8_t PROGMEM
     B01000111,
     B00101110,
     B00011100 };
+  
+  
+  const uint8_t PROGMEM // Bitmaps are stored in program memory
+  blinkImg[][8] = {    // Eye animation frames
+  { B00111100,         // Fully open eye
+    B01111110,
+    B11111111,
+    B11111111,
+    B11111111,
+    B11111111,
+    B01111110,
+    B00111100 },
+  { B00000000,
+    B01111110,
+    B11111111,
+    B11111111,
+    B11111111,
+    B11111111,
+    B01111110,
+    B00111100 },
+  { B00000000,
+    B00000000,
+    B00111100,
+    B11111111,
+    B11111111,
+    B11111111,
+    B00111100,
+    B00000000 },
+  { B00000000,
+    B00000000,
+    B00000000,
+    B00111100,
+    B11111111,
+    B01111110,
+    B00011000,
+    B00000000 },
+  { B00000000,         // Fully closed eye
+    B00000000,
+    B00000000,
+    B00000000,
+    B10000001,
+    B01111110,
+    B00000000,
+    B00000000 } };
     
     
-    
- uint8_t
-  //blinkIndex[] PROGMEM = { 1, 2, 3, 4, 3, 2, 1 }, // Blink bitmap sequence
-  blinkCountdown = 100, // Countdown to next blink (in frames)
+ const uint8_t  PROGMEM  blinkIndex[] = { 1, 2, 3, 4, 3, 2, 1 }; // Blink bitmap sequence
+  
+uint8_t  blinkCountdown = 100, // Countdown to next blink (in frames) 
   gazeCountdown  =  75, // Countdown to next eye movement
   gazeFrames     =  50, // Duration of eye movement (smaller = faster)
-  mouthPos       =   0, // Current image number for mouth
-  mouthCountdown =  10, // Countdown to next mouth change
   newPos         = 255, // New mouth position for current frame
   *seq,                 // Animation sequence currently being played back
   idx,                  // Current array index within animation sequence
@@ -132,23 +150,50 @@ int8_t
   dX   = 0, dY   = 0;   // Distance from prior to new position
   
 
-const long  DEBOUNCE = 100;
-
 byte Start_Flag = 1;
-byte Win_Flag = 0;
-long  last_debounce_time = 0;
 uint8_t switch0  = 0;
 uint8_t switch1 = 1;
 uint8_t switch11 = 11;
 
 uint8_t pin_flag= 0; // pin_flag carries the button value to the audio logic
+uint8_t talk_flag=0; // talk flag carries an incremental value for branching
+/*Wav files for the T.A.L.B. 
+BAKERY.WAV  
+BTHR_ME.WAV  
+DNT_TCH.WAV  
+HELLO.WAV  
+OUCH.WAV  
+PAY_ATN.WAV  
+WADIMEAN.WAV 
+ON_LEFT.WAV  
+OUCH.WAV  
+NOTES.WAV 
+WTCH_ME.WAV  
+
+*/
+ 
+char
+  wav0[]   = "HELLO.WAV",
+  wav1[]   = "OUCH.WAV",
+  wav2[]   = "PAY_ATN.WAV",
+  wav3[]   = "DNT_TCH.WAV",
+  wav4[]   = "WADIMEAN.WAV",
+  wav5[]   =  "BTHR_ME.WAV",
+  wav6[]   = "BAKERY.WAV",
+  wav7[]   =  "ON_LEFT.WAV",
+  wav8[]   =  "NOTES.WAV",
+  wav9[]   =  "WTCH_ME.WAV";
+
+/*
+char *wavname[]= { wav0, wav1, wav2 , wav3, wav4, wav5, wav6, wav7, wav8, wav9 };
+*/
 //////////////////////////////////// SETUP
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps for debugging
   
   putstring_nl("\nTalk-a-lot-Bot!");  // say we woke up!
   
-  //for (uint8_t k= 11; k < 14; k++)  
+
 /*
   Set Button Pins to High for user to tell Button Input is Working
 */
@@ -219,41 +264,66 @@ void loop() {
   //pin_flag 
   Serial.print("pin_flag = ");
   Serial.println(pin_flag);
-  uint8_t i;
+ 
           /*EYES BLINKING BEHAVIOR   */
+   // Draw eyeball in current state of blinkyness (no pupil).
+
+          
  
 /* Start the eyes with a wide eye and then a blink */
+close_eye();
+
  
  /* Beginning WaveFile */   
  if ( Start_Flag ){
+      Start_Flag = 0; // set to 0 : no restart unless abort
       Serial.println( "STARTING");
-      playcomplete(wav0);
+      playcomplete(wav3);   //OUch, don't touch that
+      playcomplete(wav0); //Hello.wav
   }
-  Start_Flag = 0; 
-  eye_move();
-
-
-
-
-  if (pin_flag==10){   
-   playcomplete("BAKERY.WAV");
-   Serial.println("Playing sound");
- }
- 
- 
- if (pin_flag==1){
-   
-   playcomplete("HELLO.WAV");
-   Serial.println("Playing sound");
- }
- 
- if (pin_flag==11){
-   
-   playcomplete("BTHR_ME.WAV");
-   Serial.println("Playing sound");
- }
-  delay(30);
   
+  //eye_move();
+ 
+ Serial.print("talk_flag=");
+ Serial.println(talk_flag);
+ 
+  close_eye();
+ if (talk_flag==0) {
+   talk_flag++;
+   if (pin_flag==1 ){
+     
+     Serial.println("Playing sound");
+     Serial.print("talk_flag=");
+     Serial.println(talk_flag);
+      playcomplete(wav8); 
+   } else if (pin_flag==10 ) {
+     
+      playcomplete(wav0); //Hello.wav
+      playcomplete(wav6);  //Bakery.wav
+       playcomplete(wav9);
+   Serial.println("Playing sound");
+
+   } else if (pin_flag==11){
+        playcomplete(wav5); //Bthr_me.wav
+       Serial.println("Playing sound");    
+   }
+ }
+ close_eye();
+
+  if (talk_flag==1){
+     talk_flag=0;
+    if (pin_flag==1 ){
+       playcomplete(wav3);//Ouch.wav
+    } else if (pin_flag==10){
+      
+      playcomplete(wav6); //
+    } else if (pin_flag ==11) {
+       playcomplete(wav7);
+    }else {
+     eye_move();
+    }
+    
+  }
  
  if (swp0 == LOW){
    Serial.println("REading button 0");
@@ -274,16 +344,10 @@ void loop() {
  }
  Serial.print("pin_flag = ");
    Serial.println(pin_flag);
-  eye_move();
- 
-  eye_move();
   
-  //playcomplete("GT4.WAV");
-  //root.rewind();
-  //play(root);
-
-
-
+ delay(400);
+  //eye_move();
+ 
 }
 
 
@@ -291,26 +355,87 @@ void loop() {
 void eye_move(){
   
   //Serial.println("EYE MOVE");
+      matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, blinkImg[1], 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(100);
+      matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, blinkImg[1], 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(100);
+  
+        matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, blinkImg[2], 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(100);
+      matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, blinkImg[2], 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(50);
     matrixRight.clear();
   matrixRight.drawBitmap(0, 0, open_rightEye_bmp, 8, 8, LED_ON);
   matrixRight.writeDisplay();
-  delay(250);
+  delay(50);
 
   matrixLeft.clear();
   matrixLeft.drawBitmap(0, 0, open_leftEye_bmp, 8, 8, LED_ON);
   matrixLeft.writeDisplay();
-  delay(250);
+  delay(50);
   
   matrixRight.clear();
   matrixRight.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
   matrixRight.writeDisplay();
-  delay(500);
+  delay(100);
   
   matrixLeft.clear();
   matrixLeft.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
   matrixLeft.writeDisplay();
-  delay(500);
+  delay(100);
+   matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, slit_bmp, 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(100);
+  
+  matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, slit_bmp, 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(100);
+  
+    matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, open_rightEye_bmp, 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(100);
+  
+  matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, open_leftEye_bmp, 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(100);
   //Serial.println("LEAVE EYEMOVE");
+}
+
+void close_eye() {
+
+  
+  for (int i = 0; i < 5; i++){
+            matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, blinkImg[i], 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(20);
+      matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, blinkImg[i], 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(20);
+  }
+  
+    matrixRight.clear();
+  matrixRight.drawBitmap(0, 0, open_rightEye_bmp, 8, 8, LED_ON);
+  matrixRight.writeDisplay();
+  delay(100);
+
+  matrixLeft.clear();
+  matrixLeft.drawBitmap(0, 0, open_leftEye_bmp, 8, 8, LED_ON);
+  matrixLeft.writeDisplay();
+  delay(100);
 }
 
 /////////////////////////////////// HELPERS
@@ -335,6 +460,7 @@ void sdErrorCheck(void) {
   while(1);
 }
 
+/*
 void storeEntryName(char name[], dir_t &dir){
   uint8_t j = 0;
  for (uint8_t i = 0; i < 11; i++) {
@@ -344,80 +470,7 @@ void storeEntryName(char name[], dir_t &dir){
  }
   name[j]=0;
 }
-
-/*
- * play recursively - possible stack overflow if subdirectories too nested
- */
-void play(FatReader &dir) {
-  FatReader file;
-  while (dir.readDir(dirBuf) > 0) {    // Read every file in the directory one at a time
-  
-    // Skip it if not a subdirectory and not a .WAV file
-    if (!DIR_IS_SUBDIR(dirBuf)
-         && strncmp_P((char *)&dirBuf.name[8], PSTR("WAV"), 3)) {
-      continue;
-    }
-
-    Serial.println();            // clear out a new line
-    
-    for (uint8_t i = 0; i < dirLevel; i++) {
-       Serial.write(' ');       // this is for prettyprinting, put spaces in front
-    }
-    if (!file.open(vol, dirBuf)) {        // open the file in the directory
-      error("file.open failed");          // something went wrong
-    }
-    
-    if (file.isDir()) {                   // check if we opened a new directory
-      putstring("Subdir: ");
-      printEntryName(dirBuf);
-      Serial.println();
-      dirLevel += 2;                      // add more spaces
-      // play files in subdirectory
-      play(file);                         // recursive!
-      dirLevel -= 2;    
-    }
-
-    else {
- 
-      putstring("CLOSE EYE ");
-       matrixRight.clear();
-       matrixRight.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
-       matrixRight.writeDisplay();
-       delay(500);
-  
-        putstring("CLOSE EYE");
-       matrixLeft.clear();
-       matrixLeft.drawBitmap(0, 0, closeEye_bmp, 8, 8, LED_ON);
-       matrixLeft.writeDisplay();
-       delay(500);
-  
-      // Aha! we found a file that isnt a directory
-      putstring("Playing ");
-      printEntryName(dirBuf);       // print it out
-      Serial.println();
-      putstring(" Name collected from file");
-      char name[11];
-      storeEntryName(name,dirBuf);
-      Serial.println(name);
-      
-      if (!wave.create(file)) {            // Figure out, is it a WAV proper?
-        putstring(" Not a valid WAV");     // ok skip it
-      } else {
-        Serial.println();                  // Hooray it IS a WAV proper!
-        wave.play();                       // make some noise!
-        
-        uint8_t n = 0;
-        while (wave.isplaying) {// playing occurs in interrupts, so we print dots in realtime
-          putstring(".");
-          if (!(++n % 32))Serial.println();
-          delay(100);
-        }       
-        sdErrorCheck();                    // everything OK?
-        // if (wave.errors)Serial.println(wave.errors);     // wave decoding errors
-      }
-    }
-  }
-}
+*/
 
 // Plays a full file from beginning to end with no pause.
 void playcomplete( char *name) {
